@@ -1,7 +1,6 @@
 package edu.ucsc.gameAI;
 
 import pacman.game.Constants.DM;
-import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 import edu.ucsc.gameAI.decisionTrees.binary.IBinaryNode;
@@ -9,11 +8,11 @@ import edu.ucsc.gameAI.decisionTrees.binary.IBinaryNode;
 public class SafePowerPillAction implements IAction, IBinaryNode {
 
 	MOVE move;
-	int safeDistance;
+	//int safeDistance;
 	int awayDistance;
 	
-	public SafePowerPillAction(int safeDistance, int awayDistance){
-		this.safeDistance = safeDistance;
+	public SafePowerPillAction(int awayDistance){
+		//this.safeDistance = safeDistance;
 		this.awayDistance = awayDistance;
 	}
 	
@@ -21,7 +20,10 @@ public class SafePowerPillAction implements IAction, IBinaryNode {
 	public IAction makeDecision(Game game) {
 		// TODO Auto-generated method stub
 		
+		double minDistance = Integer.MAX_VALUE;
+		int selectedPowerPillIndex = -1;
 		for(int powerPillIndex : game.getActivePowerPillsIndices()){
+			/*
 			boolean safe = true;
 			for(GHOST ghost : GHOST.values()){
 				if(game.getGhostEdibleTime(ghost)==0 && game.getGhostLairTime(ghost)==0){
@@ -31,13 +33,19 @@ public class SafePowerPillAction implements IAction, IBinaryNode {
 					}
 				}
 			}
-			if(safe){
-				if(game.getDistance(game.getPacmanCurrentNodeIndex(), powerPillIndex, DM.PATH) > 10){
-					move = game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), powerPillIndex, DM.PATH);
-				}
-				else
-					move = game.getNextMoveAwayFromTarget(game.getPacmanCurrentNodeIndex(), powerPillIndex, DM.PATH);
+			*/
+			//if(safe){
+			double distance = game.getDistance(game.getPacmanCurrentNodeIndex(), powerPillIndex, DM.PATH);
+			if(distance < minDistance){
+				minDistance = distance;
+				selectedPowerPillIndex = powerPillIndex;
 			}
+		}
+		if(selectedPowerPillIndex != -1){
+			if(game.getDistance(game.getPacmanCurrentNodeIndex(), selectedPowerPillIndex, DM.PATH) > 10)
+				move = game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), selectedPowerPillIndex, DM.PATH);
+			else
+				move = game.getNextMoveAwayFromTarget(game.getPacmanCurrentNodeIndex(), selectedPowerPillIndex, DM.PATH);
 		}
 		
 		return this;

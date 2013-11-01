@@ -61,7 +61,7 @@ public class Executor
 		
 		//run multiple games in batch mode - good for testing.
 		int numTrials=1000;
-		exec.runExperiment(new MyPacMan(),new Legacy2TheReckoning(),numTrials);
+		exec.runExperiment(new StarterPacMan(),new MyGhosts(),numTrials);
 		 
 		
 		/*
